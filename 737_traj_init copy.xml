@@ -1,0 +1,36 @@
+<?xml version="1.0" ?>
+<initialize name="Trajectory Init">
+	<!-- <longitude unit="DEG">116.46553471</longitude>
+	<latitude type="geodetic" unit="DEG">39.75232712</latitude>
+	<altitude unit="FT">8000</altitude>
+	<vt unit="FT/SEC">480.0</vt>
+	<psi unit="DEG">265.82743044688215</psi> -->
+	<!-- <theta unit="DEG">0</theta>
+	<alpha unit="DEG">0</alpha> -->
+
+
+	<position frame="ECEF">
+		<altitudeAGL unit="FT">29.5</altitudeAGL>
+
+		<latitude type="geodetic" unit="DEG"> 39.7637496335422 </latitude>
+    <longitude unit="DEG"> 116.49925455358186 </longitude>
+  	</position>
+
+	<orientation unit="DEG" frame="LOCAL">
+		<yaw>   </yaw>
+	</orientation>
+
+	<velocity unit="FT/SEC" frame="LOCAL">
+		<x> 0.0 </x>
+		<y> 0.0 </y>
+		<z> 0.0 </z>
+	</velocity>
+
+	<attitude_rate unit="DEG/SEC" frame="LOCAL">
+		<x> 0.0 </x>
+		<y> 0.0 </y>
+		<z> 0.0 </z>
+	</attitude_rate>
+
+  	<elevation unit="FT">   26.0  </elevation>
+</initialize>

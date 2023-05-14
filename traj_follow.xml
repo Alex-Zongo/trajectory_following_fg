@@ -7,12 +7,12 @@
   <description>
     This is a very simple script that trims the aircraft with running
     engines at altitude and runs out to 100 seconds. Some state data
-    is printed out at ten second intervals. 
+    is printed out at ten second intervals.
   </description>
 
-  <use aircraft="737" initialize="737_traj_init.xml"/> 
+  <use aircraft="737" initialize="737_traj_init.xml"/>
 
-  <run start="0" end="500" dt="0.008333">
+  <run start="0" end="300" dt="0.008333">
 
     <property value="0"> simulation/notify-time-trigger </property>
 
@@ -20,8 +20,21 @@
       <condition> simulation/sim-time-sec ge 0 </condition>
       <set name="propulsion/engine[0]/set-running" value="1"/>
       <set name="propulsion/engine[1]/set-running" value="1"/>
+
+      <!-- <set name="propulsion/engine[0]/n2" value="90.0" />
+      <set name="propulsion/engine[1]/n2" value="90.0" /> -->
       <set name="fcs/throttle-cmd-norm[0]" value="1.0"/>
       <set name="fcs/throttle-cmd-norm[1]" value="1.0"/>
+      <set name="propulsion/starter_cmd" value="1"/>
+      <set name="guidance/target_wp_longitude_rad" value="2.025586919342"/>
+      <set name="guidance/target_wp_latitude_rad" value="0.693397038373"/>
+      <!-- <set name="ap/heading-setpoint-select" value="0"/> -->
+
+      <set name="ap/heading_setpoint" value="265.82743044688215"/>
+      <set name="ap/heading-setpoint-select" value="0"/>
+      <set name="ap/heading_hold" value="1"/>
+      <set name="ap/altitude_setpoint" value="12000" action="FG_EXP" tc="0.5" />
+      <set name="ap/attitude_hold" value="0"/>
       <notify/>
     </event>
 
@@ -35,24 +48,33 @@
       5: Turn
       6: None
     -->
-    
+    <event name="Reach Altitude of 12,000 ft">
+      <condition>
+        simulation/sim-time-sec ge 2
+      </condition>
+      <set name="ap/altitude_hold" value="1" />
+      <set name="gear/gear-cmd-norm" value="0"/>
+      <notify>
+        <property> position/h-sl-ft </property>
+      </notify>
+
+    </event>
     <event name="Head to Waypoint 1">
       <condition>
-        simulation/sim-time-sec lt 0.1
+        position/h-sl-ft ge 12000
       </condition>
-      <set name="gear/gear-cmd-norm" value="0"/>
-      <set name="guidance/target_wp_longitude_rad" value="2.025586919342"/>
-      <set name="guidance/target_wp_latitude_rad" value="0.693397038373"/>
-      <set action="FG_EXP" tc="10.0" name="ap/altitude_setpoint" value="12782.657665623867"/>
       <set name="ap/heading-setpoint-select" value="1"/>
-	  <set name="ap/active-waypoint" value="1"/>
+	    <set name="ap/active-waypoint" value="1"/>
       <!-- <set name="simulation/do_simple_trim" value="5"/> -->
-      <delay>5.0</delay>
+      <!-- <delay>5.0</delay> -->
       <notify>
         <property>propulsion/engine[0]/n2</property>
         <property>propulsion/engine[1]/n2</property>
         <property>propulsion/engine[0]/thrust-lbs</property>
         <property>propulsion/engine[1]/thrust-lbs</property>
+        <property>guidance/wp-heading-deg</property>
+        <property>velocities/vt-fps</property>
+        <property>velocities/vc-fps</property>
         <!-- <property>velocities/vc-kts</property>
         <property>velocities/vc-fps</property>
         <property>velocities/vt-fps</property>
@@ -70,38 +92,94 @@
 
     <event name="terminate the simulation">
 			<condition>
-				guidance/wp-distance lt 200
-				
+				guidance/wp-distance lt 300
+        ap/active-waypoint eq 2
 			</condition>
 			<set name="simulation/terminate" value="1"/>
-			<notify format="kml">
+			<notify>
 				<property caption="longitude">position/long-gc-rad</property>
 				<property caption="latitude">position/lat-gc-rad</property>
 				<property caption="altitude">position/h-sl-meters</property>
 				<property caption="airspeed">velocities/vtrue-fps</property>
+        <property>velocities/vt-fps</property>
 				<property caption="sim-time">simulation/sim-time-sec</property>
 			</notify>
 		</event>
 
+    <!-- <event name="set the last waypoint">
+      <condition>
+        guidance/wp-distance le 500
+        ap/active-waypoint eq 2
+      </condition>
+      <set name="guidance/target_wp_longitude_rad" value="2.021724274329"/>
+			<set name="guidance/target_wp_latitude_rad" value="0.694935777768"/>
+    </event> -->
+    <!-- <event name="head to waypoint 2">
+      <condition logic="AND">
+        guidance/wp-distance le 4000
+        ap/active-waypoint eq 1
+        ap/heading-setpoint-select eq 0
+      </condition>
+      <set name="ap/heading-setpoint-select" value="1"/>
+      <set name="ap/active-waypoint" value="2"/>
+      <notify>
+        <property>ap/heading-setpoint-select</property>
+        <property>guidance/wp-heading-deg</property>
+
+        <property>propulsion/engine[0]/n2</property>
+        <property>propulsion/engine[1]/n2</property>
+        <property caption="longitude">position/long-gc-rad</property>
+        <property caption="latitude">position/lat-gc-rad</property>
+        <property caption="altitude">position/h-sl-meters</property>
+        <property caption="airspeed">velocities/vtrue-fps</property>
+        <property>velocities/vt-fps</property>
+        <property caption="sim-time">simulation/sim-time-sec</property>
+      </notify>
+    </event> -->
+
+    <event name="set the last waypoint">
+      <condition>
+        guidance/wp-distance le 20000
+        ap/active-waypoint eq 1
+      </condition>
+      <!-- <set name="guidance/target_wp_longitude_rad" value="2.024994513224"/>
+			<set name="guidance/target_wp_latitude_rad" value="0.693454835693"/> -->
+      <set name="ap/attitude_hold" value="0"/>
+      <set name="guidance/target_wp_longitude_rad" value="2.021724274329"/>
+			<set name="guidance/target_wp_latitude_rad" value="0.694935777768"/>
+
+      <!-- <set name="ap/heading_setpoint" value="260.0"/>
+      <set name="ap/heading-setpoint-select" value="0"/> -->
+
+			<!-- <set name="ap/altitude_setpoint" value="12782.657665623867" action="FG_EXP" tc="0.5"/> -->
+      <set name="ap/active-waypoint" value="2"/>
+      <notify>
+        <property>ap/heading_setpoint</property>
+        <property>guidance/wp-heading-deg</property>
+
+        <property>propulsion/engine[0]/n2</property>
+        <property>propulsion/engine[1]/n2</property>
+        <property caption="longitude">position/long-gc-rad</property>
+        <property caption="latitude">position/lat-gc-rad</property>
+        <property caption="altitude">position/h-sl-meters</property>
+        <property caption="airspeed">velocities/vtrue-fps</property>
+        <property>velocities/vt-fps</property>
+        <property caption="sim-time">simulation/sim-time-sec</property>
+      </notify>
+    </event>
+
+
+
     <event name="Repeating Notify" persistent="true">
       <description>Output message at 5 second intervals</description>
       <notify>
-        <!-- <property>propulsion/engine[0]/n2</property>
-        <property>propulsion/engine[1]/n2</property>
-        <property>propulsion/engine[0]/thrust-lbs</property>
-        <property>propulsion/engine[1]/thrust-lbs</property> -->
-        <property>position/h-agl-ft</property>
-        <!-- <property>velocities/vc-kts</property>
-        <property>velocities/vc-fps</property> -->
-        <!-- <property>velocities/vt-fps</property>
-        <property>attitude/phi-rad</property>
-        <property>attitude/theta-rad</property>
-        <property>attitude/psi-rad</property> -->
-        <property caption="longitude">position/long-gc-rad</property>
-				<property caption="latitude">position/lat-gc-rad</property>
-				<property caption="altitude">position/h-sl-meters</property>
-				<property caption="airspeed">velocities/vtrue-fps</property>
+
+        <property>guidance/wp-distance</property>
+        <property>guidance/wp-heading-deg</property>
 				<property caption="sim-time">simulation/sim-time-sec</property>
+        <property>velocities/vt-fps</property>
+        <property caption="airspeed">velocities/vtrue-fps</property>
+        <property>position/h-sl-ft</property>
       </notify>
       <condition> simulation/sim-time-sec >= simulation/notify-time-trigger </condition>
       <set name="simulation/notify-time-trigger" value="5" type="FG_DELTA"/>
