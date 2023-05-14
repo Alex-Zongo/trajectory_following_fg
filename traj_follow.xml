@@ -5,9 +5,7 @@
     name="Cruise flight with steady turn in 737.">
 
   <description>
-    This is a very simple script that trims the aircraft with running
-    engines at altitude and runs out to 100 seconds. Some state data
-    is printed out at ten second intervals.
+
   </description>
 
   <use aircraft="737" initialize="737_traj_init.xml"/>
@@ -18,19 +16,18 @@
 
     <event name="Set engines running">
       <condition> simulation/sim-time-sec ge 0 </condition>
+      <set name="propulsion/starter_cmd" value="1"/>
+
       <set name="propulsion/engine[0]/set-running" value="1"/>
       <set name="propulsion/engine[1]/set-running" value="1"/>
-
-      <!-- <set name="propulsion/engine[0]/n2" value="90.0" />
-      <set name="propulsion/engine[1]/n2" value="90.0" /> -->
       <set name="fcs/throttle-cmd-norm[0]" value="1.0"/>
       <set name="fcs/throttle-cmd-norm[1]" value="1.0"/>
-      <set name="propulsion/starter_cmd" value="1"/>
+
       <set name="guidance/target_wp_longitude_rad" value="2.025586919342"/>
       <set name="guidance/target_wp_latitude_rad" value="0.693397038373"/>
       <!-- <set name="ap/heading-setpoint-select" value="0"/> -->
 
-      <set name="ap/heading_setpoint" value="265.82743044688215"/>
+      <set name="ap/heading_setpoint" value="240.0"/>
       <set name="ap/heading-setpoint-select" value="0"/>
       <set name="ap/heading_hold" value="1"/>
       <set name="ap/altitude_setpoint" value="12000" action="FG_EXP" tc="0.5" />
