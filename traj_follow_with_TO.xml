@@ -8,7 +8,7 @@
 
   </description>
 
-  <use aircraft="c310" initialize="737_traj_init_with_TO"/>
+  <use aircraft="737" initialize="737_traj_init_with_TO"/>
 
   <run start="0" end="1000" dt="0.02">
 
@@ -23,11 +23,13 @@
       <set name="fcs/left-brake-cmd-norm" value="0"/> -->
       <!-- <set name="propulsion/engine[0]/set-running" value="1"/>
       <set name="propulsion/engine[1]/set-running" value="1"/> -->
+
+      <set name="propulsion/set-running" value="-1"/>
       <set name="fcs/mixture-cmd-norm[0]" value="1"/>
       <set name="fcs/mixture-cmd-norm[1]" value="1"/>
       <set name="fcs/advance-cmd-norm[0]" value="1.0"/>
       <set name="fcs/advance-cmd-norm[1]" value="1.0"/>
-      <set name="propulsion/magneto_cmd" value="3"/>
+      <!-- <set name="propulsion/magneto_cmd" value="3"/> -->
       <set name="propulsion/starter_cmd" value="1"/>
 
       <set name="fcs/throttle-cmd-norm[0]" value="1.0"/>
