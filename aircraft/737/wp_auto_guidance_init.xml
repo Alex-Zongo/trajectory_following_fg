@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<initialize name="Engine Running">
+	<longitude unit="DEG">116.46553471302296</longitude>
+	<latitude unit="DEG">39.752327119952156</latitude>
+	<altitude unit="FT">12782.657665623867</altitude>
+	<vt unit="FT/SEC">480.0697721535906</vt>
+	<psi unit="DEG">265.82743044688215</psi>
+	<gamma unit="DEG">0.0</gamma>
+	<phi unit="DEG">0.0</phi>
+	<running>-1</running>
+</initialize>
